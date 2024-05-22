@@ -1,6 +1,6 @@
 {
-  "name": "react-d3-tree",
-  "version": "3.6.2",
+  "name": "react-evs-d3-tree",
+  "version": "3.6.9",
   "description": "React component to create interactive D3 tree hierarchies",
   "author": "Ben Kremer",
   "license": "MIT",
@@ -41,7 +41,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bkrem/react-d3-tree.git"
+    "url": "https://github.com/TimHsueh-ui/react-evs-d3-tree"
   },
   "keywords": [
     "react",

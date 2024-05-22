@@ -35,6 +35,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     translate: { x: 0, y: 0 },
     pathFunc: 'diagonal',
     pathClassFunc: undefined,
+    pathShadowClassFunc: undefined,
     transitionDuration: 500,
     depthFactor: undefined,
     collapsible: true,
@@ -56,6 +57,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
     dimensions: undefined,
     centeringTransitionDuration: 800,
     dataKey: undefined,
+    doubleLink: false,
+    customCollapsible: false,
   };
 
   state: TreeState = {
@@ -460,7 +463,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * the initial render of the tree.
    */
   generateTree() {
-    const { initialDepth, depthFactor, separation, nodeSize, orientation } = this.props;
+    const { initialDepth, depthFactor, separation, nodeSize, orientation, customCollapsible } = this.props;
     const { isInitialRenderForDataset } = this.state;
     const tree = d3tree<TreeNodeDatum>()
       .nodeSize(orientation === 'horizontal' ? [nodeSize.y, nodeSize.x] : [nodeSize.x, nodeSize.y])
@@ -471,7 +474,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       );
 
     const rootNode = tree(
-      hierarchy(this.state.data[0], d => (d.__rd3t.collapsed ? null : d.children))
+      hierarchy(this.state.data[0], d => (d.__rd3t.collapsed ? (customCollapsible ? d.children: null) : d.children))
     );
     let nodes = rootNode.descendants();
     const links = rootNode.links();
@@ -483,7 +486,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
     if (depthFactor) {
       nodes.forEach(node => {
-        node.y = node.depth * depthFactor;
+        const factor = typeof depthFactor === 'number' ? depthFactor : depthFactor(node);
+        node.y = node.depth * factor;
       });
     }
 
@@ -540,6 +544,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
       enableLegacyTransitions,
       svgClassName,
       pathClassFunc,
+      pathShadowClassFunc,
+      doubleLink,
     } = this.props;
     const { translate, scale } = this.state.d3;
     const subscriptions = {
@@ -564,6 +570,36 @@ class Tree extends React.Component<TreeProps, TreeState> {
             transform={`translate(${translate.x},${translate.y}) scale(${scale})`}
           >
             {links.map((linkData, i) => {
+              if (doubleLink) {
+                return (
+                  <>
+                    <Link
+                      key={'link-shadow-' + i}
+                      orientation={orientation}
+                      pathFunc={pathFunc}
+                      pathClassFunc={pathShadowClassFunc}
+                      linkData={linkData}
+                      onClick={() => {}}
+                      onMouseOver={() => {}}
+                      onMouseOut={() => {}}
+                      enableLegacyTransitions={enableLegacyTransitions}
+                      transitionDuration={transitionDuration}
+                    />
+                    <Link
+                      key={'link-' + i}
+                      orientation={orientation}
+                      pathFunc={pathFunc}
+                      pathClassFunc={pathClassFunc}
+                      linkData={linkData}
+                      onClick={this.handleOnLinkClickCb}
+                      onMouseOver={this.handleOnLinkMouseOverCb}
+                      onMouseOut={this.handleOnLinkMouseOutCb}
+                      enableLegacyTransitions={enableLegacyTransitions}
+                      transitionDuration={transitionDuration}
+                    />
+                  </>
+                );
+              }
               return (
                 <Link
                   key={'link-' + i}

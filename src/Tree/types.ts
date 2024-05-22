@@ -9,6 +9,7 @@ import {
   RawNodeDatum,
   RenderCustomNodeElementFn,
   TreeNodeDatum,
+  DepthFactorFunction,
 } from '../types/common.js';
 
 export type TreeNodeEventCallback = (
@@ -164,6 +165,8 @@ export interface TreeProps {
    */
   pathClassFunc?: PathClassFunction;
 
+  pathShadowClassFunc?: PathClassFunction;
+
   /**
    * Determines the spacing between parent & child nodes.
    *
@@ -175,7 +178,7 @@ export interface TreeProps {
    *
    * {@link Tree.defaultProps.depthFactor | Default value}
    */
-  depthFactor?: number;
+  depthFactor?: number | DepthFactorFunction;
 
   /**
    * Determines whether the tree's nodes can collapse/expand.
@@ -319,4 +322,8 @@ export interface TreeProps {
    * {@link Tree.defaultProps.dataKey | Default value}
    */
   dataKey?: string;
+
+  doubleLink?: boolean;
+
+  customCollapsible?: boolean;
 }

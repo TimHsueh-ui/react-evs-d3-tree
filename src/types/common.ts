@@ -31,6 +31,7 @@ export interface TreeLinkDatum {
 export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
 export type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => string;
 export type PathClassFunction = PathFunction;
+export type DepthFactorFunction = (node: HierarchyPointNode<TreeNodeDatum>) => number;
 
 export type SyntheticEventHandler = (evt: SyntheticEvent) => void;
 export type AddChildrenFunction = (children: RawNodeDatum[]) => void;
