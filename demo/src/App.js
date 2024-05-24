@@ -87,7 +87,7 @@ class App extends Component {
       translateY: 300,
       collapsible: true,
       shouldCollapseNeighborNodes: false,
-      initialDepth: 1,
+      initialDepth: 3,
       depthFactor: undefined,
       zoomable: true,
       draggable: true,

@@ -1,5 +1,8 @@
 {
   "name": "CEO",
+  "attributes": {
+    "collapsed": false
+  },
   "children": [
     {
       "name": "Manager",
